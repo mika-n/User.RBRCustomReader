@@ -7,6 +7,8 @@ Custom Richard Burns Rally (RBR) data reader plugin for SimHub. This plugin adds
 
 ## SimHub addon plugin installation:
 - Close SimHub application
+- Download the latest _SimHubPlugin_User.RBRCustomReader_versionTag.zip_ file from Releases page (see the right frame and Releases link)
+- Extract the downloaded zip file or navigate inside of it using FileExplorer to see files in the zip file
 - Copy _User.RBRCustomReader.dll_ file into the SimHub application folder (ie. the folder where you have SimHubWPF.exe)
 - Launch SimHub and it will probably notify you it detected a new addon plugin
   - Enable the _RBR Custom Reader_ plugin
