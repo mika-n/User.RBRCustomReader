@@ -24,3 +24,5 @@ WTFPL licensed to public domain, free for commercial and personal use, modificat
 
 If you modify and create a derivated version using this app then please leave the above shown copyright text in the derived work as a credit to the original work (readme.txt and source code files).
 
+
+![NCalc example](NCalcExampple1.png)
