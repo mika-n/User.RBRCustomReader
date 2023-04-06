@@ -1,13 +1,15 @@
 ﻿//
-// RBRCustomReader - Custom plugin for Richard Burns Rally racing game.
+// RBRCustomReader - Custom SimHub addon plugin for Richard Burns Rally racing game
+//
+// Note! This is SIMHUB plugin, not RBR plugin. The User.RBRCustomReader.dll file goes into SimHub folder, not into RBR Plugins folder.
 //
 // Copyright (c) 2023 mika-n, www.rallysimfans.hu. No promises and/or warranty given what so ever. This may or may not work. Use at your own risk.
 //
 // WTFPL licensed to public domain, free for commercial and personal use, modifications and redistribution allowed. http://www.wtfpl.net/
 // If you modify and create a derivated version using this app then please leave the above shown copyright text in the derived work as a credit to the original work (readme.txt and source code files).
 //
-// SimHub addon installation:
-// - Copy bin/release/RBRCustomReader.dll file into the SimHub application folder (ie. the folder where you have SimHubWPF.exe)
+// SimHub addon plugin installation:
+// - Copy User.RBRCustomReader.dll file into the SimHub application folder (ie. the folder where you have SimHubWPF.exe)
 // - Launch SimHub and it will probably notify you it detected a new addon plugin.
 //    - Enable the RBRCustomReader plugin
 //    - No need to tick "show in left menu" option 
