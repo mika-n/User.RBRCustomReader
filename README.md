@@ -1,17 +1,19 @@
 # User.RBRCustomReader
 
-Custom Richard Burns Rally (RBR) data reader plugin for SimHub. This plugin adds certain new properties to be used by SH dashboards.
+Custom Richard Burns Rally (RBR) data reader plugin for SimHub. This plugin adds new properties to be used by SimHub dashboards.
 
-RSFCarName = The true car name as shown in Rallysimfans (RSF) car selection screens.
-RSFCarID = RSF car ID (not the same as 0..7 car slot ID)
+- RSFCarName = The true car name as shown in Rallysimfans (RSF) car selection screens.
+- RSFCarID = RSF car ID (not the same as 0..7 car slot ID)
 
 ## SimHub addon plugin installation:
 - Close SimHub application
-- Copy RBRCustomReader.dll file into the SimHub application folder (ie. the folder where you have SimHubWPF.exe)
+- Download the latest _SimHubPlugin_User.RBRCustomReader_versionTag.zip_ file from Releases page (see the right frame and Releases link)
+- Extract the downloaded zip file or navigate inside of it using FileExplorer to see files in the zip file
+- Copy _User.RBRCustomReader.dll_ file into the SimHub application folder (ie. the folder where you have SimHubWPF.exe)
 - Launch SimHub and it will probably notify you it detected a new addon plugin
-  - Enable the RBRCustomReader plugin
-  - No need to tick "show in left menu" option 
-- The plugin should be now shown as enabled in SimHub/Settings/Plugins tab page
+  - Enable the _RBR Custom Reader_ plugin
+  - No need to tick _Show in left menu_ option 
+- The plugin should be now shown as enabled in _SimHub/Settings/Plugins_ tab page
  
 ## How to use new custom properties in SimHub dashboard layout
 - Add a text object into SimHub dashboard layout and set the text object to use NCalc formula with RSFCarName or RSFCarID property reference
