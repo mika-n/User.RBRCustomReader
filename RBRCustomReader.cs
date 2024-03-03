@@ -39,6 +39,10 @@ namespace User.RBRCustomReader
         // The timestamp of the previous RBR racing session. Car attributes are updated only once per new session (=new session start time)
         private DateTime prevSessionStartTime;
 
+        // Timespan of the current race       
+        private bool updateRaceTimespan;  // When TRUE when dataReader starts a new timespan as soon race time is >0 (ie. the race is started)
+        private Stopwatch raceStopWatch;
+
         // RBR game path (initialized only once because no one probably re-installs RBR while SimHub rbr dashboard is running
         private string RBRGamePath;
         private string GetRBRGamePath()
@@ -84,25 +88,54 @@ namespace User.RBRCustomReader
         public void DataUpdate(PluginManager pluginManager, ref GameData data)
         {
             //if (data.GameRunning && data.NewData != null && data.NewData.CarModel != oldCarModelName)
-            if (data.SessionStartDate > prevSessionStartTime && data.NewData != null)
+            if (data.NewData != null)
             {
-                // A new car loaded in RBR. Refresh car attributes up-to-date
-                //SimHub.Logging.Current.Info("[RBRCustomReader] New car selection. Refreshing car attributes");
-                prevSessionStartTime = data.SessionStartDate.AddSeconds(2);
-
-                if (string.IsNullOrEmpty(data.NewData.CarModel))
+                if (data.SessionStartDate > prevSessionStartTime)
                 {
-                    RSFCarID = 0;
-                    RSFCarName = "";
+                    // A new car loaded in RBR. Refresh car attributes up-to-date
+                    //SimHub.Logging.Current.Info("[RBRCustomReader] New car selection. Refreshing car attributes");
+                    prevSessionStartTime = data.SessionStartDate.AddSeconds(2);
+
+                    raceStopWatch.Reset();
+                    updateRaceTimespan = true;
+
+                    if (string.IsNullOrEmpty(data.NewData.CarModel))
+                    {
+                        RSFCarID = 0;
+                        RSFCarName = "";
+                    }
+                    else
+                    {
+                        // New car selection. Refresh settinsg up-to-date
+                        int rsfCarSlotID = IniFile.ReadInt("cars", "slot", 5, $"{GetRBRGamePath()}\\rallysimfans.ini");
+
+                        string carsIniFile = $"{GetRBRGamePath()}\\Cars\\Cars.ini";
+                        RSFCarID = IniFile.ReadInt($"Car0{rsfCarSlotID}", "RSFCarID", 0, carsIniFile);
+                        RSFCarName = IniFile.ReadString($"Car0{rsfCarSlotID}", "CarName", "", carsIniFile);
+                    }
                 }
-                else
-                {
-                    // New car selection. Refresh settinsg up-to-date
-                    int rsfCarSlotID = IniFile.ReadInt("cars", "slot", 5, $"{GetRBRGamePath()}\\rallysimfans.ini");
 
-                    string carsIniFile = $"{GetRBRGamePath()}\\Cars\\Cars.ini";
-                    RSFCarID = IniFile.ReadInt($"Car0{rsfCarSlotID}", "RSFCarID", 0, carsIniFile);
-                    RSFCarName = IniFile.ReadString($"Car0{rsfCarSlotID}", "CarName", "", carsIniFile);
+                if (updateRaceTimespan)
+                {
+                    if (data.NewData.CurrentLapTime.Ticks > 0)
+                    {
+                        // Start the race stopWatch when the RBR "lap" begins
+                        raceStopWatch.Restart();
+                        updateRaceTimespan = false;
+                    }
+                }
+                else if (!data.GamePaused)
+                {
+                    // RBR is NOT in paused state. Start the raceStopWatch if it not yet running
+                    if (!raceStopWatch.IsRunning)
+                    {
+                        raceStopWatch.Start();
+                    }
+                }
+                else if (raceStopWatch.IsRunning)
+                {
+                    // RBR paused. Stop the raceStopWatch
+                    raceStopWatch.Stop();
                 }
             }
         }
@@ -141,9 +174,14 @@ namespace User.RBRCustomReader
 
             prevSessionStartTime = DateTime.MinValue;
 
+            updateRaceTimespan = false;
+            raceStopWatch = new Stopwatch();
+            raceStopWatch.Reset();            
+
             // Declare a property available in the property list, this gets evaluated "on demand" (when shown or used in formulas)
             this.AttachDelegate("RSFCarID", () => RSFCarID);
             this.AttachDelegate("RSFCarName", () => RSFCarName);
+            this.AttachDelegate("ExternalRaceTime", () => raceStopWatch.Elapsed);
         }
     }
 }
